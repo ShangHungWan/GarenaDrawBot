@@ -7,7 +7,7 @@ from config import *
 DRAW_URL = "https://luckydraw.gamehub.garena.tw/service/luckydraw/"
 GAME = "lol"
 REGION = "TW"
-VERSION = "1651048097"
+VERSION = "1653292834"
 
 
 def sendMessage(message: str):
@@ -21,6 +21,9 @@ def queryExpiry(quite: bool = True) -> int:
 
     if "result" in response:
         result = response["result"]["cooldown_expiry"]
+        print(result)
+        if result == 0:
+            result = int(time.time())
 
         if not quite:
             sendMessage(datetime.fromtimestamp(result).__str__())
@@ -38,7 +41,9 @@ def draw() -> int:
     ).json()
 
     if "result" in response:
-        sendMessage(response["result"]["prize"]["item"]["desc"])
+        price = response["result"]["prize"]["item"]["desc"]
+        print(price)
+        sendMessage(price)
         return response["result"]["cooldown_expiry"]
     else:
         return queryExpiry()
