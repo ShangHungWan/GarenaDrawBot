@@ -7,7 +7,7 @@ from config import *
 DRAW_URL = "https://luckydraw.gamehub.garena.tw/service/luckydraw/"
 GAME = "lol"
 REGION = "TW"
-VERSION = "1653292834"
+VERSION = "1655884834"
 
 
 def sendMessage(message: str):
