@@ -7,21 +7,24 @@ from config import *
 DRAW_URL = "https://luckydraw.gamehub.garena.tw/service/luckydraw/"
 GAME = "lol"
 REGION = "TW"
-VERSION = "1655884834"
 
+version = ""
 
 def sendMessage(message: str):
     bot.send_message(text=message, chat_id=TELEGRAM_ID)
 
 
 def queryExpiry(quite: bool = True) -> int:
+    global version
+
     response = requests.get(
-        DRAW_URL, {"sk": SK, "region": REGION, "tid": TID}, verify=False
+        DRAW_URL, {"sk": SK, "region": REGION, "tid": TID},
     ).json()
 
     if "result" in response:
         result = response["result"]["cooldown_expiry"]
-        print(result)
+        version = response["result"]["settings"][0]["version"]
+        print(f"next expiry: {result} = {datetime.fromtimestamp(result)}")
         if result == 0:
             result = int(time.time())
 
@@ -34,18 +37,25 @@ def queryExpiry(quite: bool = True) -> int:
 
 
 def draw() -> int:
+    global version
+
     response = requests.post(
         DRAW_URL,
-        {"game": GAME, "sk": SK, "region": REGION, "version": VERSION, "tid": TID},
-        verify=False,
+        {"game": GAME, "sk": SK, "region": REGION, "version": version, "tid": TID},
     ).json()
 
     if "result" in response:
         price = response["result"]["prize"]["item"]["desc"]
-        print(price)
+        print(f"price: {price}")
         sendMessage(price)
         return response["result"]["cooldown_expiry"]
+    elif "error" in response:
+        detail = response["detail"]
+        print(f"error: {detail}")
+        sendMessage(response["detail"])
+        exit()
     else:
+        print(f"exception: {response}")
         return queryExpiry()
 
 
