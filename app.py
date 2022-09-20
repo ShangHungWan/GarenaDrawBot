@@ -53,6 +53,12 @@ def draw() -> int:
         detail = response["detail"]
         print(f"error: {detail}")
         sendMessage(response["detail"])
+
+        # get new version and draw again
+        if detail == 'Luckydraw Version Error':
+            queryExpiry()
+            return draw()
+
         exit()
     else:
         print(f"exception: {response}")
