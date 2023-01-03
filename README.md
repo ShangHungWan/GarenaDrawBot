@@ -2,7 +2,7 @@
 
 ## Introduction
 
-[2023-01-03 Update] RIP Garena Lucky Draw \|/
+[2023-01-03 Update] RIP Garena Lucky Draw \\|/
 
 This is a simple bot to draw in Garena's app, and return the result by Telegram.
 
